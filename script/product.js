@@ -135,6 +135,15 @@ fetch(`https://dummyjson.com/products/${productId}`)
         });
 
         // Mouse events for desktop devices
+        sliderDiv.addEventListener('mouseover', () => {
+            document.querySelector('.prev').classList.toggle('onscreen');
+            document.querySelector('.next').classList.toggle('onscreen');
+        })
+        sliderDiv.addEventListener('mouseout', () => {
+            document.querySelector('.prev').classList.toggle('onscreen');
+            document.querySelector('.next').classList.toggle('onscreen');
+        })
+        
         imageTrack.addEventListener('mousedown', (e) => {
             startX = e.clientX;
             isDragging = true;
