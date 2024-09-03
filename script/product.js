@@ -111,6 +111,83 @@ fetch(`https://dummyjson.com/products/${productId}`)
             imageTrack.style.transform = `translateX(${shift}px)`;
             startAutoSlide();
         })
+
+
+        // swipe functionality
+
+        let startX = 0;
+        let endX = 0;
+        let isDragging = false;
+
+        // Touch events for mobile devices
+        imageTrack.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        });
+
+        imageTrack.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+        });
+
+        imageTrack.addEventListener('touchend', () => {
+            handleSwipe();
+            isDragging = false;
+        });
+
+        // Mouse events for desktop devices
+        imageTrack.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            isDragging = true;
+        });
+
+        imageTrack.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                endX = e.clientX;
+            }
+        });
+
+        imageTrack.addEventListener('mouseup', () => {
+            if (isDragging) {
+                handleSwipe();
+                isDragging = false;
+            }
+        });
+
+         // Prevent default dragging for desktop
+         imageTrack.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+        });
+
+        // Common swipe handling function
+        function handleSwipe() {
+            const diffX = startX - endX;
+
+            // Check if the swipe was significant enough to be considered a swipe
+            if (Math.abs(diffX) > 50) { // 50px threshold for swipe detection
+                if (diffX > 0) {
+                    // Swipe left (next image)
+                    shift -= sliderDiv.clientWidth;
+
+                    if (shift <= -(images.length * sliderDiv.clientWidth)) {
+                        shift = 0;
+                    }
+                } else {
+                    // Swipe right (previous image)
+                    shift += sliderDiv.clientWidth;
+
+                    if (shift > 0) {
+                        shift = (images.length - 1) * -(sliderDiv.clientWidth);
+                    }
+                }
+
+                // Update slider position and dots
+                imageTrack.style.transform = `translateX(${shift}px)`;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === shift / (viewFinderSize)));
+                startAutoSlide();
+            }
+        }
+
+
         
         const productTitle = document.querySelector('.top-title > h1');
 
