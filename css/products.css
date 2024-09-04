@@ -69,7 +69,12 @@ main{
 }
 .prev, .next{
     position: absolute;
+    display: none;
 }
+.onscreen{
+    display: block;
+}
+
 .prev{
     width: 40px;
     height: 40px;

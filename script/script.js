@@ -29,7 +29,7 @@ fetch('https://dummyjson.com/products')
                     <p>${averageRating}</p>
                 </div>
                 <p class="price">
-                    ${product.price}$
+                    ${(product.price - (product.price * (product.discountPercentage/100))).toFixed(2)}$
                 </p>
             </div>
         </div>`;

@@ -197,11 +197,59 @@ fetch(`https://dummyjson.com/products/${productId}`)
         }
 
 
-        
+        //  adding title to the page
+
         const productTitle = document.querySelector('.top-title > h1');
 
         productTitle.innerHTML = `${data.title}`;
 
 
+        //adding star rating and rating number to the page
+    
+         // Calculate the average rating
+        let reviews = data.reviews;
+
+
+        function calculateAverageRating(reviews) {
+            const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+            return totalRating / reviews.length;
+        }
+
+        // Function to update star colors
+        function updateStarRating(averageRating) {
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById(`star${i}`);
+                if (i <= averageRating) {
+                    star.classList.remove('fa-regular');
+                    star.classList.add('fa-solid', 'fa-star');
+                    star.style.color = 'orangered';
+                } else {
+                    star.classList.remove('fa-solid', 'fa-star');
+                    star.classList.add('fa-regular', 'fa-star');
+                    star.style.color = '#ccc'; 
+                }
+            }
+        }
+
+        // Calculate and update the stars
+        const averageRating = calculateAverageRating(reviews);
+        updateStarRating(averageRating);
+
+        // adding float number of rating
+        document.querySelector('.rating-count').innerHTML = `<p>${averageRating.toFixed(1)}</p>`;
+
+
+
+        // adding price and discount
+
+        let priceDiv = document.querySelector('.price-discount');
+        
+        if(!(data.discountPercetage)){
+            priceDiv.innerHTML = `<p>-${(data.discountPercentage).toFixed(1)}%</p>
+            <p>${(data.price - (data.price * (data.discountPercentage/100))).toFixed(2)}$</p>`;
+        }
+        else{
+            priceDiv.innerHTML = `<p>${data.price}$`;
+        }
     })
 
